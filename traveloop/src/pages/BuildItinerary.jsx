@@ -33,6 +33,7 @@ import { Capacitor } from "@capacitor/core";
 import { Filesystem, Directory } from "@capacitor/filesystem";
 import MapPreview from "../components/trip/MapPreview";
 import { calculateBudgetSummary, validateExpenseAmount } from "../utils/budgetHelper";
+import logoImg from "../assets/logo.jpg";
 
 const CATEGORY_ICONS = {
   "Food":      { icon: Utensils, color: "#F59E0B", bg: "#FEF3C7" },
@@ -70,6 +71,8 @@ const BuildItinerary = () => {
 
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareLink, setShareLink] = useState("");
   const [days, setDays] = useState(1);
   const [activeDay, setActiveDay] = useState(1);
   const [items, setItems] = useState([]);
@@ -1986,8 +1989,10 @@ const BuildItinerary = () => {
       const data = await res.json();
       if (data.success) {
         const publicUrl = `https://traveloop-751k.vercel.app/shared/${data.trip.shareToken}`;
+        setShareLink(publicUrl);
         navigator.clipboard.writeText(publicUrl);
         setCopiedLink(true);
+        setShowShareModal(true);
         toast.success("Public link copied to clipboard!");
         setTimeout(() => setCopiedLink(false), 3000);
       }
@@ -3882,6 +3887,123 @@ const BuildItinerary = () => {
           <p className="text-sm font-bold animate-pulse">Exporting PDF...</p>
         </div>
       )}
+
+      {/* ── SHARE CARD MODAL ── */}
+      <AnimatePresence>
+        {showShareModal && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-sm bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col"
+            >
+              {/* Boarding Pass header */}
+              <div className="bg-[#0B1325] text-white p-5 relative overflow-hidden flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg overflow-hidden bg-white">
+                    <img src={logoImg} alt="Logo" className="w-full h-full object-cover" />
+                  </div>
+                  <span className="text-sm font-black tracking-tight">TRAVELOOP PASS</span>
+                </div>
+                <span className="text-teal-400 font-extrabold text-[10px] tracking-widest uppercase bg-teal-500/10 px-2 py-0.5 rounded-full border border-teal-500/20">
+                  BOARDING CARD
+                </span>
+                {/* Decorative circles on header */}
+                <div className="absolute -bottom-3 -left-3 w-6 h-6 rounded-full bg-slate-900/60 backdrop-blur-md" />
+                <div className="absolute -bottom-3 -right-3 w-6 h-6 rounded-full bg-slate-900/60 backdrop-blur-md" />
+              </div>
+
+              {/* Pass details */}
+              <div className="p-6 bg-slate-50/55 flex-1 relative">
+                {/* Left/Right dotted cutout line decoration */}
+                <div className="absolute top-0 inset-x-0 flex items-center justify-between -mt-3 px-3">
+                  <div className="w-3 h-3 rounded-full bg-slate-900/10 -ml-1.5" />
+                  <div className="flex-1 border-t border-dashed border-slate-200 mx-2" />
+                  <div className="w-3 h-3 rounded-full bg-slate-900/10 -mr-1.5" />
+                </div>
+
+                <div className="space-y-4 pt-2">
+                  <div>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase block tracking-wider">Passenger Name</span>
+                    <span className="text-sm font-extrabold text-slate-800">
+                      {user?.firstName ? `${user.firstName} ${user.lastName || ""}` : "Traveler"}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase block tracking-wider">Destination</span>
+                      <span className="text-sm font-extrabold text-teal-600 flex items-center gap-1">
+                        📍 {trip?.destination || "N/A"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase block tracking-wider">Trip Duration</span>
+                      <span className="text-sm font-extrabold text-slate-800">
+                        🗓️ {days} days
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase block tracking-wider">Start Date</span>
+                      <span className="text-xs font-bold text-slate-700">
+                        {trip?.startDate ? new Date(trip.startDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "N/A"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase block tracking-wider">End Date</span>
+                      <span className="text-xs font-bold text-slate-700">
+                        {trip?.endDate ? new Date(trip.endDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "N/A"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Decorative Barcode */}
+                  <div className="flex flex-col items-center pt-3 border-t border-slate-100">
+                    <div className="w-full h-12 flex items-center justify-around px-2 bg-white rounded-lg border border-slate-100">
+                      {Array.from({ length: 30 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className="h-8 bg-slate-850 rounded-xs"
+                          style={{
+                            width: `${(i % 3 === 0 ? 3 : i % 2 === 0 ? 1 : 2)}px`,
+                            opacity: i % 5 === 0 ? 0.3 : 1
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[8px] font-mono text-slate-400 mt-1 uppercase tracking-widest">
+                      TRVLP-{trip?._id?.substring(0, 8) || "SHARE"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions Footer */}
+              <div className="p-5 border-t border-slate-100 flex flex-col gap-2">
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareLink);
+                    toast.success("Link copied!");
+                  }}
+                  className="w-full py-3 rounded-full text-white font-bold text-xs bg-gradient-to-r from-teal-500 to-cyan-500 shadow-md hover:shadow-lg active:scale-98 transition-all flex items-center justify-center gap-1.5"
+                >
+                  <Check size={14} /> Copy Public Share Link
+                </button>
+                <button
+                  onClick={() => setShowShareModal(false)}
+                  className="w-full py-3 rounded-full text-slate-500 font-bold text-xs bg-slate-100 hover:bg-slate-200 active:scale-98 transition-all"
+                >
+                  Close Pass
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </MainLayout>
   );
 };

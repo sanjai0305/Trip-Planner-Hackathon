@@ -38,6 +38,7 @@ const TermsAndConditions = lazy(() => import("../pages/TermsAndConditions"));
 const TravelJournal = lazy(() => import("../pages/TravelJournal"));
 const NearbyPlaces = lazy(() => import("../pages/NearbyPlaces"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
+const About = lazy(() => import("../pages/About"));
 
 // PROTECTED ROUTE
 import ProtectedRoute from "./ProtectedRoute";
@@ -221,6 +222,12 @@ const AppRoutes = () => {
           <Route
             path="/terms"
             element={<TermsConditions />}
+          />
+
+          {/* ABOUT */}
+          <Route
+            path="/about"
+            element={<About />}
           />
 
           {/* NEW TERMS AND CONDITIONS PAGE */}

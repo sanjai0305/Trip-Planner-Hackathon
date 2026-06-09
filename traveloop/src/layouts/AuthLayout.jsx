@@ -1,11 +1,12 @@
 // src/layouts/AuthLayout.jsx
 
 import React, { useEffect, useState } from "react";
-import { Plane, MapPin, Star } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 // IMAGES
 import LoginBg from "../assets/images/login-bg.jpg";
+import logoImg from "../assets/logo.jpg";
 
 const AuthLayout = ({ children }) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -69,14 +70,14 @@ const AuthLayout = ({ children }) => {
         <div className="absolute top-6 right-6 w-32 h-32 rounded-full blur-3xl opacity-75 transition-opacity duration-300" style={{ background: "rgba(20,184,181,0.25)", display: isKeyboardVisible ? "none" : "block" }} />
         <div className="absolute bottom-0 left-8 w-40 h-32 rounded-full blur-3xl opacity-75 transition-opacity duration-300" style={{ background: "rgba(20,184,181,0.20)", display: isKeyboardVisible ? "none" : "block" }} />
 
-        {/* Floating plane icon */}
+        {/* Floating logo icon */}
         <motion.div
           animate={{ y: [-4, 4, -4] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-8 right-8 flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20"
+          className="absolute top-8 right-8 flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 overflow-hidden"
           style={{ display: isKeyboardVisible ? "none" : "flex" }}
         >
-          <Plane size={24} className="text-white rotate-12" />
+          <img src={logoImg} alt="Logo" className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Hero content */}
@@ -89,10 +90,9 @@ const AuthLayout = ({ children }) => {
         >
           <div className="flex items-center gap-2 mb-3">
             <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #14B8B5, #0D9488)" }}
+              className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden border border-white/10"
             >
-              <Plane size={16} className="text-white rotate-12" />
+              <img src={logoImg} alt="Logo" className="w-full h-full object-cover" />
             </div>
             <span className="text-white font-bold text-lg tracking-tight">Traveloop</span>
           </div>

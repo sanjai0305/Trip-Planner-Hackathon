@@ -1,5 +1,6 @@
 import os
 import base64
+import json
 from PIL import Image, ImageDraw
 
 def get_processed_logo(source_path):
@@ -85,8 +86,8 @@ def create_play_store_icon(logo):
     return img
 
 def create_splash_screen(logo, width, height):
-    # solid white background
-    img = Image.new("RGBA", (width, height), (255, 255, 255, 255))
+    # premium dark navy background: rgb(11, 19, 37) / #0B1325
+    img = Image.new("RGBA", (width, height), (11, 19, 37, 255))
     logo_size = int(min(width, height) * 0.4)
     w, h = logo.size
     scale = min(logo_size / w, logo_size / h)
@@ -99,8 +100,22 @@ def create_splash_screen(logo, width, height):
     img.paste(logo_resized, (x, y), logo_resized)
     return img.convert("RGB")
 
+def create_ios_icon(logo, target_size):
+    # ios app icons do not support transparency, so paste onto navy background
+    img = Image.new("RGBA", (target_size, target_size), (11, 19, 37, 255))
+    icon_size = int(target_size * 0.85)
+    w, h = logo.size
+    scale = min(icon_size / w, icon_size / h)
+    new_w = int(w * scale)
+    new_h = int(h * scale)
+    logo_resized = logo.resize((new_w, new_h), Image.Resampling.LANCZOS)
+    x = (target_size - new_w) // 2
+    y = (target_size - new_h) // 2
+    img.paste(logo_resized, (x, y), logo_resized)
+    return img.convert("RGB")
+
 def main():
-    source_logo_path = r"C:\Users\sanja\.gemini\antigravity-ide\brain\3be36933-e468-4306-8175-27387bc0db4a\media__1780639593826.jpg"
+    source_logo_path = "src/assets/logo.jpg"
     if not os.path.exists(source_logo_path):
         print(f"Error: Source logo not found at {source_logo_path}")
         return
@@ -182,8 +197,8 @@ def main():
     icon_512 = logo.resize((512, 512), Image.Resampling.LANCZOS)
     icon_512.save(os.path.join(public_path, "icon-512x512.png"), "PNG")
     
-    # apple-touch-icon.png
-    apple_icon = logo.resize((180, 180), Image.Resampling.LANCZOS)
+    # apple-touch-icon.png (requires flat background)
+    apple_icon = create_ios_icon(logo, 180)
     apple_icon.save(os.path.join(public_path, "apple-touch-icon.png"), "PNG")
     
     # favicon.ico
@@ -206,6 +221,62 @@ def main():
         f.write(svg_content)
         
     print("Generated PWA and web icons in public folder successfully!")
+
+    # 5. Generate iOS App Icons
+    ios_assets_path = "ios/App/App/Assets.xcassets/AppIcon.appiconset"
+    os.makedirs(ios_assets_path, exist_ok=True)
+    
+    ios_configs = [
+        {"filename": "icon-20x20@2x.png", "size": 40},
+        {"filename": "icon-20x20@3x.png", "size": 60},
+        {"filename": "icon-29x29@1x.png", "size": 29},
+        {"filename": "icon-29x29@2x.png", "size": 58},
+        {"filename": "icon-29x29@3x.png", "size": 87},
+        {"filename": "icon-40x40@1x.png", "size": 40},
+        {"filename": "icon-40x40@2x.png", "size": 80},
+        {"filename": "icon-40x40@3x.png", "size": 120},
+        {"filename": "icon-60x60@2x.png", "size": 120},
+        {"filename": "icon-60x60@3x.png", "size": 180},
+        {"filename": "icon-20x20@1x.png", "size": 20},
+        {"filename": "icon-76x76@1x.png", "size": 76},
+        {"filename": "icon-76x76@2x.png", "size": 152},
+        {"filename": "icon-83.5x83.5@2x.png", "size": 167},
+        {"filename": "icon-1024x1024.png", "size": 1024}
+    ]
+    
+    for config in ios_configs:
+        ios_icon = create_ios_icon(logo, config["size"])
+        ios_icon.save(os.path.join(ios_assets_path, config["filename"]), "PNG")
+        print(f"Generated iOS icon {config['filename']} of size {config['size']}")
+        
+    # Write Contents.json
+    contents = {
+      "images" : [
+        { "size" : "20x20", "idiom" : "iphone", "filename" : "icon-20x20@2x.png", "scale" : "2x" },
+        { "size" : "20x20", "idiom" : "iphone", "filename" : "icon-20x20@3x.png", "scale" : "3x" },
+        { "size" : "29x29", "idiom" : "iphone", "filename" : "icon-29x29@1x.png", "scale" : "1x" },
+        { "size" : "29x29", "idiom" : "iphone", "filename" : "icon-29x29@2x.png", "scale" : "2x" },
+        { "size" : "29x29", "idiom" : "iphone", "filename" : "icon-29x29@3x.png", "scale" : "3x" },
+        { "size" : "40x40", "idiom" : "iphone", "filename" : "icon-40x40@2x.png", "scale" : "2x" },
+        { "size" : "40x40", "idiom" : "iphone", "filename" : "icon-40x40@3x.png", "scale" : "3x" },
+        { "size" : "60x60", "idiom" : "iphone", "filename" : "icon-60x60@2x.png", "scale" : "2x" },
+        { "size" : "60x60", "idiom" : "iphone", "filename" : "icon-60x60@3x.png", "scale" : "3x" },
+        { "size" : "20x20", "idiom" : "ipad", "filename" : "icon-20x20@1x.png", "scale" : "1x" },
+        { "size" : "20x20", "idiom" : "ipad", "filename" : "icon-20x20@2x.png", "scale" : "2x" },
+        { "size" : "29x29", "idiom" : "ipad", "filename" : "icon-29x29@1x.png", "scale" : "1x" },
+        { "size" : "29x29", "idiom" : "ipad", "filename" : "icon-29x29@2x.png", "scale" : "2x" },
+        { "size" : "40x40", "idiom" : "ipad", "filename" : "icon-40x40@1x.png", "scale" : "1x" },
+        { "size" : "40x40", "idiom" : "ipad", "filename" : "icon-40x40@2x.png", "scale" : "2x" },
+        { "size" : "76x76", "idiom" : "ipad", "filename" : "icon-76x76@1x.png", "scale" : "1x" },
+        { "size" : "76x76", "idiom" : "ipad", "filename" : "icon-76x76@2x.png", "scale" : "2x" },
+        { "size" : "83.5x83.5", "idiom" : "ipad", "filename" : "icon-83.5x83.5@2x.png", "scale" : "2x" },
+        { "size" : "1024x1024", "idiom" : "ios-marketing", "filename" : "icon-1024x1024.png", "scale" : "1x" }
+      ],
+      "info" : { "version" : 1, "author" : "xcode" }
+    }
+    with open(os.path.join(ios_assets_path, "Contents.json"), "w") as f:
+        json.dump(contents, f, indent=2)
+    print("Generated Contents.json for iOS app icons. iOS icons generation complete!")
 
 if __name__ == "__main__":
     main()

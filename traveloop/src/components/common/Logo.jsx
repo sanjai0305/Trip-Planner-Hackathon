@@ -1,7 +1,7 @@
 // src/components/common/Logo.jsx
 
 import React from "react";
-import { Plane } from "lucide-react";
+import logoImg from "../../assets/logo.jpg";
 
 const Logo = () => {
   return (
@@ -22,7 +22,7 @@ const Logo = () => {
         "
       >
         
-        {/* ICON WRAPPER */}
+        {/* ICON WRAPPER (LOGO IMAGE) */}
         <div
           className="
             relative
@@ -34,11 +34,6 @@ const Logo = () => {
             md:h-18
             
             rounded-2xl
-            
-            bg-gradient-to-br
-            from-teal-500
-            via-cyan-500
-            to-sky-500
             
             flex
             items-center
@@ -52,24 +47,10 @@ const Logo = () => {
           "
         >
           
-          {/* GLOW EFFECT */}
-          <div
-            className="
-              absolute
-              inset-0
-              bg-white/10
-            "
-          />
-
-          {/* PLANE ICON */}
-          <Plane
-            size={30}
-            className="
-              text-white
-              rotate-[-25deg]
-              relative
-              z-10
-            "
+          <img
+            src={logoImg}
+            alt="Traveloop Logo"
+            className="w-full h-full object-cover"
           />
         </div>
 

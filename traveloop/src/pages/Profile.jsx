@@ -9,7 +9,7 @@ import {
   User, Mail, Phone, MapPin, Globe, CalendarDays, ShieldCheck,
   ChevronRight, Bell, Lock, Eye, Palette, HelpCircle, LogOut,
   Camera, Map, Plane, Clock, Moon, Sun, Award, Flame, Star,
-  Languages, ChevronDown, Heart, AlertTriangle, Trash2, FileText
+  Languages, ChevronDown, Heart, AlertTriangle, Trash2, FileText, Info
 } from "lucide-react";
 import { getApiUrl } from "../utils/api";
 import BottomSheet from "../components/mobile/BottomSheet";
@@ -50,6 +50,7 @@ const SETTINGS_GROUPS = [
     items: [
       { icon: HelpCircle, label: "Help & Support",     sub: "FAQs, contact us",                color: "#6B7280", bg: "rgba(107,114,128,0.1)" },
       { icon: FileText,   label: "Terms & Conditions", sub: "View our terms and conditions",   color: "#14B8B5", bg: "rgba(20,184,181,0.1)", path: "/terms-and-conditions" },
+      { icon: Info,       label: "About Traveloop",    sub: "Learn more about the application", color: "#3B82F6", bg: "rgba(59,130,246,0.1)", path: "/about" },
     ],
   },
 ];

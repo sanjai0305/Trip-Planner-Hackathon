@@ -9,7 +9,7 @@ import LoginForm from "./LoginForm";
 import SocialLogin from "./SocialLogin";
 
 // IMAGES
-import Luggage from "../../assets/images/luggage.png";
+import logoImg from "../../assets/logo.jpg";
 
 const AuthCard = () => {
   const [googleError, setGoogleError] = useState("");
@@ -29,7 +29,7 @@ const AuthCard = () => {
     <div className="animate-slide-up">
       {/* WELCOME HEADER */}
       <div className="flex items-center gap-4 mb-8">
-        {/* Luggage icon */}
+        {/* Traveloop logo */}
         <div
           className="
             relative
@@ -39,18 +39,17 @@ const AuthCard = () => {
             w-16
             h-16
             rounded-2xl
-            bg-gradient-to-br
-            from-teal-50
-            to-cyan-50
             border
             border-teal-100
             flex-shrink-0
+            overflow-hidden
+            shadow-[0_8px_30px_rgb(20,184,181,0.15)]
           "
         >
           <img
-            src={Luggage}
-            alt="Travel"
-            className="w-10 h-10 object-contain animate-float"
+            src={logoImg}
+            alt="Traveloop Logo"
+            className="w-full h-full object-cover animate-float"
           />
         </div>
 
