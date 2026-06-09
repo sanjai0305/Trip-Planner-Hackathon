@@ -4,5 +4,4 @@
     <string name="title_activity_main">Traveloop</string>
     <string name="package_name">com.sanjai.traveloop</string>
     <string name="custom_url_scheme">com.sanjai.traveloop</string>
-    <string name="server_client_id">872930983851-epqv9mi3fh8anajm9crkfe9aj4i4o9bv.apps.googleusercontent.com</string>
 </resources>

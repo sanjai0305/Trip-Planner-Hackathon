@@ -17,6 +17,7 @@
     "@capacitor/filesystem": "^8.1.2",
     "@capacitor/ios": "^8.4.0",
     "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
+    "@react-oauth/google": "^0.13.5",
     "firebase": "^12.14.0",
     "framer-motion": "^12.40.0",
     "html2canvas": "^1.4.1",

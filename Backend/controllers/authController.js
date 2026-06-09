@@ -812,7 +812,7 @@ export const googleAuth = async (req, res) => {
     const clientId = process.env.GOOGLE_CLIENT_ID;
     const allowedClientIds = [
       clientId,
-      "872930983851-epqv9mi3fh8anajm9crkfe9aj4i4o9bv.apps.googleusercontent.com",
+      "176828060174-fkphm10lp2ggqe0b58jdcajjs8lkcuus.apps.googleusercontent.com",
       "872930983851-sp955pg20dv701f90lfej5ult72tle27.apps.googleusercontent.com"
     ].filter(Boolean);
 

@@ -4,7 +4,10 @@
   "webDir": "dist",
   "plugins": {
     "GoogleAuth": {
-      "scopes": ["profile", "email"],
+      "scopes": [
+        "profile",
+        "email"
+      ],
       "serverClientId": "872930983851-epqv9mi3fh8anajm9crkfe9aj4i4o9bv.apps.googleusercontent.com",
       "forceCodeForRefreshToken": true
     }
