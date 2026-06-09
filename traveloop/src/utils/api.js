@@ -13,7 +13,7 @@ const isNative = Capacitor.isNativePlatform();
 // always talks to the live backend — never accidentally to a missing localhost.
 // Set VITE_API_URL=http://localhost:5000 in .env ONLY when running the backend locally.
 
-const PRODUCTION_API = "https://traveloop-751k.vercel.app/api";
+const PRODUCTION_API = "http://65.2.84.40:5000/api";
 
 const getApiBaseUrl = () => {
   // 1. Explicit env var always wins (development or production)

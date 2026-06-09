@@ -799,9 +799,24 @@ export const googleAuth = async (req, res) => {
 
     const data = await verifyRes.json();
     
+    // Detailed logging for auditing Google Sign-In mismatch issues
+    console.log("[GoogleAuth Audit] idToken:", idToken);
+    console.log("[GoogleAuth Audit] token payload:", JSON.stringify(data, null, 2));
+    console.log("[GoogleAuth Audit] aud:", data.aud);
+    console.log("[GoogleAuth Audit] azp:", data.azp);
+    console.log("[GoogleAuth Audit] iss:", data.iss);
+    console.log("[GoogleAuth Audit] email:", data.email);
+    console.log("[GoogleAuth Audit] expected GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+
     // Safety check: verify Google client ID if configured
     const clientId = process.env.GOOGLE_CLIENT_ID;
-    if (clientId && data.aud !== clientId) {
+    const allowedClientIds = [
+      clientId,
+      "872930983851-epqv9mi3fh8anajm9crkfe9aj4i4o9bv.apps.googleusercontent.com",
+      "872930983851-sp955pg20dv701f90lfej5ult72tle27.apps.googleusercontent.com"
+    ].filter(Boolean);
+
+    if (clientId && !allowedClientIds.includes(data.aud)) {
       return res.status(400).json({ success: false, message: "Google Client ID mismatch" });
     }
 

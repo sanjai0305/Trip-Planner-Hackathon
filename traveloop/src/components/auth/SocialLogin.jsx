@@ -27,7 +27,7 @@ const SocialLogin = () => {
           GoogleAuth.initialize({
             clientId:
               import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-              "335198086054-googleclientid.apps.googleusercontent.com",
+              "872930983851-epqv9mi3fh8anajm9crkfe9aj4i4o9bv.apps.googleusercontent.com",
             scopes: ["profile", "email"],
             grantOfflineAccess: true,
           }).catch((err) =>
@@ -54,7 +54,7 @@ const SocialLogin = () => {
 
       const clientId =
         import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-        "335198086054-googleclientid.apps.googleusercontent.com";
+        "872930983851-epqv9mi3fh8anajm9crkfe9aj4i4o9bv.apps.googleusercontent.com";
 
       window.google.accounts.id.initialize({
         client_id: clientId,
