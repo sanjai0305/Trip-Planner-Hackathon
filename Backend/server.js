@@ -1,3 +1,4 @@
+import "./config/env.js";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -26,7 +27,6 @@ import chatRoutes from "./routes/chatRoutes.js";
 import budgetRoutes from "./routes/budgetRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 
-dotenv.config();
 
 // MongoDB — non-fatal on Vercel (DB errors return 503, not crash)
 let dbConnected = false;

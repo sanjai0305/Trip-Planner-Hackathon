@@ -1,13 +1,5 @@
 import mongoose from "mongoose";
 
-const MONGO_URI = process.env.MONGO_URI;
-
-if (!MONGO_URI) {
-  throw new Error(
-    "❌ Please define the MONGO_URI environment variable."
-  );
-}
-
 /**
  * Global cache for Vercel serverless functions
  */
@@ -21,6 +13,12 @@ if (!cached) {
 }
 
 const connectDB = async () => {
+  const MONGO_URI = process.env.MONGO_URI;
+
+  if (!MONGO_URI) {
+    throw new Error("❌ Please define the MONGO_URI environment variable.");
+  }
+
   try {
     // Already connected
     if (cached.conn) {
@@ -48,11 +46,15 @@ const connectDB = async () => {
     return cached.conn;
   } catch (error) {
     cached.promise = null;
-
-    console.error(
-      "❌ MongoDB Connection Failed:",
-      error.message
-    );
+    
+    console.error("\n========== FULL MONGODB ERROR ==========");
+    console.error(error);
+    console.error("\nName:", error?.name);
+    console.error("Code:", error?.code);
+    console.error("Message:", error?.message);
+    console.error("Stack:", error?.stack);
+    console.error("Cause:", error?.cause);
+    console.error("========================================\n");
 
     throw error;
   }

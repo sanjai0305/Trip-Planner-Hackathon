@@ -12,7 +12,11 @@ const logFail = (name, error) => console.error(`\x1b[31m✗ [FAIL] ${name}: ${er
 async function runTests() {
   console.log("=== TRAVELOOP PRODUCTION API TEST SUITE ===\n");
   dotenv.config();
-  await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/traveloop");
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error("❌ Please define the MONGO_URI environment variable.");
+  }
+  await mongoose.connect(mongoUri);
 
   let token = null;
   let testTripId = null;

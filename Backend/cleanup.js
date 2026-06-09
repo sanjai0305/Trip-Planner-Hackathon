@@ -12,7 +12,11 @@ async function cleanup() {
   console.log("Cleaning up user:", testEmail);
   
   // 1. Connect MongoDB
-  await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/traveloop");
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error("❌ Please define the MONGO_URI environment variable.");
+  }
+  await mongoose.connect(mongoUri);
   
   // 2. Delete from MongoDB
   const res = await mongoose.connection.db.collection("users").deleteOne({ email: testEmail });

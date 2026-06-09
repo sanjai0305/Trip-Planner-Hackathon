@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import User from "./models/User.js";
 import Trip from "./models/Trip.js";
 import { hasTripPermission } from "./utils/permissionHelper.js";
 
+dotenv.config();
+
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/traveloop");
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error("❌ Please define the MONGO_URI environment variable.");
+  }
+  await mongoose.connect(mongoUri);
   console.log("Connected to MongoDB");
 
   const trips = await Trip.find({});

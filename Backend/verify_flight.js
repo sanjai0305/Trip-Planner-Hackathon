@@ -17,7 +17,10 @@ async function runTests() {
   console.log("=== TRAVELOOP FLIGHT TRACKER & TIMELINE INTEGRATION TEST SUITE ===\n");
 
   // Connect database
-  const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/traveloop";
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error("❌ Please define the MONGO_URI environment variable.");
+  }
   await mongoose.connect(mongoUri);
   console.log("Database connected successfully.\n");
 
