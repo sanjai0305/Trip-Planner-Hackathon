@@ -1,3 +1,8 @@
+© 2026 Sanjai R. All Rights Reserved.
+
+TravelLoop is proprietary software developed by Sanjai R.
+Unauthorized copying, modification, distribution, or commercial use is prohibited.
+
 # Traveloop ✈️
 ### *Your Premium Full-Stack Collaborative Travel Planner*
 
